@@ -110,7 +110,7 @@ function setupRenderer() {
     stats = new Stats();
     stats.domElement.style.position = 'absolute';
     stats.domElement.style.top = '0px';
-    stats.domElement.style.left = '0px';
+    stats.domElement.style.right = '35px';
     stats.domElement.style.zIndex = 100;
     container.appendChild( stats.domElement );
 }
@@ -161,9 +161,9 @@ function init() {
     gui = new dat.GUI();
     gui.add( controls, 'angle' );
     gui.add( controls, 'length', 1 );
-    gui.add( controls, 'count', 1 );
+    gui.add( controls, 'count', 1 ).step( 1 );
     gui.add( controls, 'update');
-    gui.domElement.style.paddingTop = '50px';
+    gui.domElement.style.paddingTop = '55px';
     window.addEventListener( 'resize', onWindowResize, false );
 }
 

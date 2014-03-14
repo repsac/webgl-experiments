@@ -10,6 +10,17 @@
   z-index: 100;
 }
 
+#github {
+  position: absolute;
+  top: 5px;
+  z-index: 105;
+}
+
+#github img {
+  width: 64px;
+  height: auto;
+}
+
 #info a {
   color: red
 }
