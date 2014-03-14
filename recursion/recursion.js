@@ -161,7 +161,7 @@ function init() {
     gui = new dat.GUI();
     gui.add( controls, 'angle' );
     gui.add( controls, 'length', 1 );
-    gui.add( controls, 'count', 1 ).step( 1 );
+    gui.add( controls, 'count', 1, 15 ).step( 1 );
     gui.add( controls, 'update');
     gui.domElement.style.paddingTop = '55px';
     window.addEventListener( 'resize', onWindowResize, false );
