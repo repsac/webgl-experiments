@@ -142,7 +142,7 @@ function init() {
     setupRenderer();
     
     var aspect = window.innerWidth / window.innerHeight;
-    camera = new THREE.PerspectiveCamera( 60, aspect, 1, 1000 );
+    camera = new THREE.PerspectiveCamera( 60, aspect, 1, 50 );
     orbit = new THREE.OrbitControls( camera, container );
     orbit.addEventListener( 'change', render );
     camera.position.z = 10;
