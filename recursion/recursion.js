@@ -20,24 +20,24 @@ function drawLine( start, end, width ) {
 }
 
 function randColour() {
-    var colour = ('0x' + parseInt(randInt(75, 255)).toString(16) + 
-        parseInt(randInt(75, 255)).toString(16) + 
-        parseInt(randInt(75, 255)).toString(16));
+    var colour = ('0x' + parseInt( randInt( 75, 255 ) ).toString( 16 ) + 
+        parseInt( randInt( 75, 255 ) ).toString( 16 ) + 
+        parseInt( randInt( 75, 255 ) ).toString( 16 ));
     return parseInt(colour);
 }
 
 function randInt( min, max ) {
-    return Math.floor(Math.random() * ((max-min)+1.0) + min);
+    return Math.floor( Math.random() * ( ( max-min )+1.0 ) + min );
 }
 
 function randFloat( min, max ) {
-    return Math.random() * ((max-min)+1.0) + min;
+    return Math.random() * ( ( max-min )+1.0 ) + min;
 }
 
 function vectorOnCircle( rad ) {
-    var x = randFloat(-rad, rad),
-        z = randFloat(-rad, rad),
-        vec = new THREE.Vector3(x, 0, z);
+    var x = randFloat( -rad, rad ),
+        z = randFloat( -rad, rad ),
+        vec = new THREE.Vector3( x, 0, z );
     vec.normalize();
     vec * rad;
     return vec;
@@ -56,36 +56,37 @@ function aimY( growthDir ) {
         xAngle,
         zAngle;
   
-    var xyLength = Math.sqrt(growthDir.x * growthDir.x + growthDir.y * growthDir.y),
-        vecLength = Math.sqrt(growthDir.x * growthDir.x + growthDir.y * growthDir.y + growthDir.z * growthDir.z);
+    var xyLength = Math.sqrt( growthDir.x * growthDir.x + growthDir.y * growthDir.y),
+        vecLength = Math.sqrt( growthDir.x * growthDir.x + growthDir.y * growthDir.y + growthDir.z * growthDir.z );
   
     if ( xyLength == 0 ) {
-        zAngle = growthDir.x > 0 ? deg2rad(90) : deg2rad(-90);
+        zAngle = growthDir.x > 0 ? deg2rad( 90 ) : deg2rad( -90 );
     } else {
-        zAngle = Math.acos((growthDir.y)/xyLength);
+        zAngle = Math.acos( growthDir.y/xyLength );
     }
   
-    xAngle = Math.acos(xyLength/vecLength);
+    xAngle = Math.acos( xyLength/vecLength );
   
     xAngle = growthDir.z > 0 ? xAngle : -xAngle;
-    out.push(rad2deg(xAngle));
+    out.push( rad2deg( xAngle ) );
  
     zAngle = growthDir.x > 0 ? -zAngle : zAngle;
-    out.push(rad2deg(zAngle));
+    out.push( rad2deg( zAngle ) );
     return out;
 }
 
 function tree( depth, base, growthDir, branchAngle, branchLen ) {
-    if (depth <= 0 ){return;}
+    depth = Math.abs( depth );
+    if ( depth <= 0 ){return;}
     
-    var rad = branchLen * Math.sin( deg2rad(branchAngle) );
+    var rad = branchLen * Math.sin( deg2rad( branchAngle ) );
     var vec = vectorOnCircle( rad );
     vec.y = branchLen;
 
     var xaxis = new THREE.Vector3( 1, 0, 0 ),
         zaxis = new THREE.Vector3( 0, 0, 1 );
 
-    var angle = aimY(growthDir);
+    var angle = aimY( growthDir );
     vec.applyAxisAngle( xaxis, deg2rad(angle[0]) );
     vec.applyAxisAngle( zaxis, deg2rad(angle[1]) );
     
@@ -120,9 +121,7 @@ function clearTree() {
     for (var i=count;i>=0;i--) {
         child = scene.children[i];
         if ( child instanceof THREE.GridHelper ) {continue;}
-        if ( child instanceof THREE.Line ) {
-            scene.remove(child);
-        }
+        if ( child instanceof THREE.Line ) {scene.remove( child );}
     }
 }
 
@@ -154,7 +153,7 @@ function init() {
         this.angle = angle;
         this.length = length;
         this.count = depth;
-        this.update = function () {updateTree(this)};
+        this.update = function () {updateTree( this )};
     };
 
     var controls = new Controls();
