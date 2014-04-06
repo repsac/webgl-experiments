@@ -39,7 +39,7 @@ function vectorOnCircle( rad ) {
         z = randFloat( -rad, rad ),
         vec = new THREE.Vector3( x, 0, z );
     vec.normalize();
-    vec * rad;
+    vec.multiplyScalar( rad );
     return vec;
 }
 
