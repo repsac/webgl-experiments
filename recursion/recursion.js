@@ -158,7 +158,7 @@ function init() {
 
     var controls = new Controls();
     gui = new dat.GUI();
-    gui.add( controls, 'angle' );
+    gui.add( controls, 'angle', 5, 85);
     gui.add( controls, 'length', 1 );
     gui.add( controls, 'count', 1, 15 ).step( 1 );
     gui.add( controls, 'update');
