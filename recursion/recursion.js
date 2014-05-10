@@ -75,6 +75,7 @@ function aimY( growthDir ) {
     return out;
 }
 
+
 function tree( depth, base, growthDir, branchAngle, branchLen ) {
     depth = Math.abs( depth );
     if ( depth <= 0 ){return;}
@@ -91,12 +92,13 @@ function tree( depth, base, growthDir, branchAngle, branchLen ) {
     vec.applyAxisAngle( zaxis, deg2rad(angle[1]) );
     
     var end = new THREE.Vector3( vec.x+base.x, Math.abs(vec.y)+base.y, vec.z+base.z );
-    var reflectedVec = new THREE.Vector3( vec.x, vec.y, vec.z );
+    var reflectedVec = vec.clone();
     reflectedVec.multiplyScalar( -1 );
     reflectedVec.reflect( growthDir );
     reflectedVec.y = Math.abs( reflectedVec.y );
     reflectedVec.normalize();
-    var end2 = new THREE.Vector3( (base.x+reflectedVec.x), (base.y+reflectedVec.y), (base.z+reflectedVec.z) );
+    var end2 = reflectedVec.clone();
+    end2.add( base );
     drawLine( base, end, depth );
     drawLine( base, end2, depth );
     tree( depth-1, end, vec, branchAngle, branchLen*0.6 );
