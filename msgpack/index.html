@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang='en'>
+  <head>
+    <title>MSGPack Loading</title>
+    <meta charset='utf-8' name='viewport' content='width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0'>
+  </head>
+  <style>
+    #github {
+      position: absolute;
+      top: 8px;
+      z-index: 105;
+    }
+    #github img {
+      width: 64px;
+      height: auto;
+    }
+    #viewport {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      width: 960px;
+      height: 540px;
+    }
+  </style>
+  <script src='require.js'></script>
+  <script src='../js/threejs/three.min.js'></script>
+  <script src='../js/threejs/js/controls/OrbitControls.js'></script>
+  <body>
+    <div id='github'>
+      <a href='https://github.com/repsac/webgl-experiments' target='_blank'>
+        <img src='../images/github-10-512.png'>
+      </a>
+    </div>
+    <div id='viewport'></div>
+    <div style='position:absolute; top: 550px;'>
+    <p>Original File Size: 74.4 MB<br />
+    msgpack Size: 61.4 MB</p>
+    <p>The JSON file generated from the Blender exporter has the floating point values pruned to 6 digits. JSON can serialize up to 16 decimal places resulting in even a larger JSON dump. The compression msgpack offers may only be marginal on smaller assets.</p>
+    <p>The asset used is &quot;quadbot&quot; from the <a href='http://www.sintel.org/' target='_blank'>Sintel Open Movie</a> project.</p>
+    </div>
+    <script>
+    var scene, renderer, camera;
+
+    function loadMSGPack ( loader, callback ) {
+    
+        require(['msgpack-js'], function ( msgpack ) {
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'quadbot.pack', true);
+            xhr.responseType = 'arraybuffer';
+
+            xhr.onload = function() {
+
+                var decoded = msgpack.decode( this.response );
+
+                var result = loader.parse( decoded );
+                var mesh = callback( result.geometry );
+
+                //mesh.position.x = 3;
+
+                render();
+
+            };
+
+            xhr.send();
+        
+        });
+    }
+
+    function init () {
+
+      scene = new THREE.Scene();
+      renderer = new THREE.WebGLRenderer();
+      var container = document.getElementById( 'viewport' );
+      renderer.setSize( container.offsetWidth, container.offsetHeight );
+      container.appendChild( renderer.domElement );
+
+      var grid = new THREE.GridHelper( 10, 2.5 );
+      scene.add( grid );
+
+      camera = new THREE.PerspectiveCamera( 50, container.offsetWidth/container.offsetHeight, 0.1, 100);
+      camera.position.z = 5;
+      camera.position.y = 3;
+      var target = new THREE.Vector3( 0, 1, 0 );
+      var orbit = new THREE.OrbitControls( camera, container );
+      orbit.target = target;
+      camera.lookAt( target );
+      orbit.addEventListener( 'change', render );
+      camera.updateProjectionMatrix();
+      
+      var directionalLight = new THREE.DirectionalLight( 0xb8b8b8 );
+      directionalLight.position.set(1, 1, 1).normalize();
+      directionalLight.intensity = 1.0;
+      scene.add( directionalLight );
+     
+      directionalLight = new THREE.DirectionalLight( 0xb8b8b8 );
+      directionalLight.position.set(-1, 0.6, 0.5).normalize();
+      directionalLight.intensity = 0.5;
+      scene.add(directionalLight);
+
+      directionalLight = new THREE.DirectionalLight();
+      directionalLight.position.set(-0.3, 0.6, -0.8).normalize( 0xb8b8b8 );
+      directionalLight.intensity = 0.45;
+      scene.add(directionalLight);
+
+      var loader = new THREE.JSONLoader();
+
+      var callback = function ( geometry ) {
+
+          var material = new THREE.MeshLambertMaterial( { 
+            color: 0xcccccc,
+            side: THREE.DoubleSide 
+          } );
+
+          var mesh = new THREE.Mesh( geometry, material );
+          
+          scene.add( mesh );
+
+          render();
+
+          return mesh;
+
+      } ;
+
+      loadMSGPack( loader, callback );
+    
+    }
+
+    function render () {
+
+      renderer.render( scene, camera );
+
+    }
+
+    init();
+    render();
+    </script>
+  </body>
+</html>
