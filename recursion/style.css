@@ -1,5 +1,12 @@
+body {
+  margin: 0px;
+}
+
 #container {
   position: absolute;
+  background: #111;
+  background-image: linear-gradient(#666, #111);
+
 }
 
 #info {
@@ -22,10 +29,10 @@
 }
 
 #info a {
-  color: red
+  color: orange;
 }
 
 #info span {
-  color: gray
+  color: #ddd;
 }
 

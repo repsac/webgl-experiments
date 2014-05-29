@@ -5,6 +5,9 @@
     <meta charset='utf-8' name='viewport' content='width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0'>
   </head>
   <style>
+    p, #info {
+      font-family: Arial, Helvetica, sans-serif;
+    }
     #github {
       position: absolute;
       top: 8px;
@@ -18,8 +21,18 @@
       position: absolute;
       top: 5px;
       left: 5px;
-      width: 960px;
+      right: 5px;
       height: 540px;
+      background: #111;
+      background-image: linear-gradient(#666, #111);
+    }
+    #info {
+      position: absolute;
+      top: 10px;
+      width: 100%;
+      text-align: center;
+      font-size: 85%;
+      color: orange;
     }
   </style>
   <script src='require.js'></script>
@@ -32,6 +45,7 @@
       </a>
     </div>
     <div id='viewport'></div>
+    <div id='info'></div>
     <div style='position:absolute; top: 550px;'>
     <p>Original File Size: 74.4 MB<br />
     msgpack Size: 61.4 MB</p>
@@ -41,8 +55,17 @@
     <script>
     var scene, renderer, camera;
 
-    function loadMSGPack ( loader, callback ) {
+    function updateInfo() {
     
+        var info = document.getElementById( 'info' );
+        verts = renderer.info.render.vertices;
+        faces = renderer.info.render.faces;
+        info.innerHTML = 'vertices: '+verts+' -- faces: '+faces;
+
+    }
+
+    function loadMSGPack ( loader, callback ) {
+        console.time('msgpack loaded'); 
         require(['msgpack-js'], function ( msgpack ) {
 
             var xhr = new XMLHttpRequest();
@@ -56,9 +79,10 @@
                 var result = loader.parse( decoded );
                 var mesh = callback( result.geometry );
 
-                //mesh.position.x = 3;
-
                 render();
+                console.timeEnd('msgpack loaded');
+
+                updateInfo();
 
             };
 
@@ -70,7 +94,7 @@
     function init () {
 
       scene = new THREE.Scene();
-      renderer = new THREE.WebGLRenderer();
+      renderer = new THREE.WebGLRenderer( { antialias: false, alpha: true } );
       var container = document.getElementById( 'viewport' );
       renderer.setSize( container.offsetWidth, container.offsetHeight );
       container.appendChild( renderer.domElement );
@@ -108,7 +132,7 @@
       var callback = function ( geometry ) {
 
           var material = new THREE.MeshLambertMaterial( { 
-            color: 0xcccccc,
+            color: 0xdddddd,
             side: THREE.DoubleSide 
           } );
 

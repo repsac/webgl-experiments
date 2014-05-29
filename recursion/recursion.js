@@ -106,7 +106,7 @@ function tree( depth, base, growthDir, branchAngle, branchLen ) {
 }
 
 function setupRenderer() {
-    renderer = new THREE.WebGLRenderer( { antialias: false } );
+    renderer = new THREE.WebGLRenderer( { antialias: false, alpha: true } );
     renderer.setSize( window.innerWidth, window.innerHeight );
     container = document.getElementById( 'container' );
     container.appendChild( renderer.domElement );
